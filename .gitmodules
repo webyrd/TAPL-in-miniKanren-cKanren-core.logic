@@ -1,0 +1,3 @@
+[submodule "external/cKanren"]
+	path = external/cKanren
+	url = git@github.com:webyrd/cKanren.git
