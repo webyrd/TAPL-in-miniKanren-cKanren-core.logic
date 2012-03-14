@@ -1,3 +1,0 @@
-[submodule "externals/cKanren"]
-	path = externals/cKanren
-	url = https://github.com/calvis/cKanren
