@@ -1,6 +1,12 @@
 # tapl
 
-FIXME: TAPL using Clojure, core.logic, and core.match
+Translation of Benjamin C. Pierce's excellent 'Types and Programming Languages' (MIT Press, 2002) into miniKanren/cKanren (R6RS Scheme) and core.logic (Clojure).  This is the Clojure version, David Nolen's using core.logic and core.match libraries.
+
+This is an exercise to help me learn more about types, better understand the strengths and limitations of miniKanren, decide which constraints should be added to cKanren, and learn Clojure and core.logic
+
+Thanks to Dan Friedman for suggesting this exercise years ago.
+
+--Will
 
 ## Usage
 
