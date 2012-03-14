@@ -57,7 +57,13 @@
            (T t1)
            (T t2)
            (T t3))])))
-  
+
+  ; 3.2.3  Terms, concretely (p. 27)
+;;; To do this properly will require adding set constraints to cKanren (CLP(Set)).
+;;; For example, see:
+;;;
+;;; http://cmpe.emu.edu.tr/bayram/courses/532/ForPresentation/p861-dovier.pdf
+
   )
 
 (import (tapl-ck))
