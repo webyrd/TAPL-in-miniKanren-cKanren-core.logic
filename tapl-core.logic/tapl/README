@@ -4,10 +4,40 @@ FIXME: TAPL using Clojure, core.logic, and core.match
 
 ## Usage
 
-FIXME: write
+From the 'tapl' directory, use Leiningen to get the dependencies (you have installed Leiningen, right?):
+
+    lein deps
+
+To run the tests, just type:
+
+    lein test
+
+To play with the code in a REPL, type this in your terminal:
+
+    lein REPL
+
+which should give you something like this:
+
+    Williams-MacBook-Air:tapl webyrd$ lein repl
+    REPL started; server listening on localhost port 3224
+    user=> 
+
+and then import tapl, core.logic, and core.match by tying (or pasting) this at the REPL:
+
+    (ns tapl-repl
+      (:use [tapl.core])
+      (:refer-clojure :exclude [==])
+      (:use [clojure.core.logic])
+      (:use [clojure.core.match :only [match]]))
+
+Now you should be ready to test the tapl code:
+      
+    tapl-repl=> (run 10 [q] (T q))
+    (:true :false :zero [:succ :true] [:succ :false] [:if :true :true :true] [:succ :zero] [:if :true :true :false] [:pred :true] [:if     :true :true :zero])
+    tapl-repl=> 
 
 ## License
 
-Copyright (C) 2012 FIXME
+Copyright (C) 2012 William E. Byrd
 
 Distributed under the Eclipse Public License, the same as Clojure.
