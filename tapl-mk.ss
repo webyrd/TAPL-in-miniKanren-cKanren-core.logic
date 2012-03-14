@@ -5,7 +5,7 @@
 ;; webyrd@gmail.com
 
 (load "match.ss")
-(load "mkdefs.scm")
+(load "mK/mkdefs.scm")
 
 ; 3.2.1  Terms, inductively  (p. 26)
 

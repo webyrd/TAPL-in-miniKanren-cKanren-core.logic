@@ -1,4 +1,4 @@
-Translation of Benjamin C. Pierce's excellent 'Types and Programming Languages' (MIT Press, 2002) into miniKanren/cKanren (Scheme) and core.logic (Clojure).
+Translation of Benjamin C. Pierce's excellent 'Types and Programming Languages' (MIT Press, 2002) into miniKanren/cKanren (R6RS Scheme) and core.logic (Clojure).
 
 This is an exercise to help me learn more about types, better understand the strengths and limitations of miniKanren, decide which constraints should be added to cKanren, and learn Clojure and core.logic
 
