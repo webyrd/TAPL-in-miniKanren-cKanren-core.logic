@@ -20,12 +20,12 @@
 
 (library
   (tapl-ck)
-  (export T?)
+  (export T? T)
   (import (rnrs)
           (match)
-          ; busted until we fix the names for the cKanren submodule
-          ;(cKanren ck)
-          )
+          (cKanren ck)
+          (cKanren tree-unify)
+          (cKanren neq))
 
   ; 3.2.1  Terms, inductively  (p. 26)  
   (define T?
@@ -40,24 +40,23 @@
         [,else #f])))
 
   ; 3.2.2  Terms, by inference rules (p. 26)
-  ; This code works under miniKanren--need to fix the names for the cKanren submodule.
-  ;; (define T
-  ;;   (lambda (t)
-  ;;     (conde
-  ;;       [(== 'true t)]
-  ;;       [(== 'false t)]
-  ;;       [(== 'zero t)]
-  ;;       [(fresh (t1)
-  ;;          (conde
-  ;;            [(== `(succ ,t1) t)]
-  ;;            [(== `(pred ,t1) t)]
-  ;;            [(== `(iszero ,t1) t)])
-  ;;          (T t1))]
-  ;;       [(fresh (t1 t2 t3)
-  ;;          (== `(if ,t1 ,t2 ,t3) t)
-  ;;          (T t1)
-  ;;          (T t2)
-  ;;          (T t3))])))
+  (define T
+    (lambda (t)
+      (conde
+        [(== 'true t)]
+        [(== 'false t)]
+        [(== 'zero t)]
+        [(fresh (t1)
+           (conde
+             [(== `(succ ,t1) t)]
+             [(== `(pred ,t1) t)]
+             [(== `(iszero ,t1) t)])
+           (T t1))]
+        [(fresh (t1 t2 t3)
+           (== `(if ,t1 ,t2 ,t3) t)
+           (T t1)
+           (T t2)
+           (T t3))])))
   
   )
 
