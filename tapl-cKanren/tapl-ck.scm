@@ -23,7 +23,9 @@
   (export T?)
   (import (rnrs)
           (match)
-          (cKanren ck))
+          ; busted until we fix the names for the cKanren submodule
+          ;(cKanren ck)
+          )
 
   (define T?
     (lambda (t)
@@ -31,9 +33,11 @@
         [true #t]
         [false #t]
         [zero #t]
-        [(succ ,[t1]) #t]
-        [(pred ,[t1]) #t]
-        [(if ,[t1] ,[t2] ,[t3]) #t]
-        [else #f])))
+        [(succ ,[t1]) t1]
+        [(pred ,[t1]) t1]
+        [(if ,[t1] ,[t2] ,[t3]) (and t1 t2 t3)]
+        [,else #f])))
   
   )
+
+(import (tapl-ck))
