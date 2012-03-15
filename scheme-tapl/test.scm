@@ -170,3 +170,39 @@
     (if true false (iszero false))
     (succ (if true zero true))
     (if true true (if true zero true))))
+
+(test-check 'uniono-1
+  (run* (q) (uniono '() '() q))
+  '(()))
+
+(test-check 'uniono-2
+  (run* (q) (uniono '(a) '() q))
+  '((a)))
+
+(test-check 'uniono-3
+  (run* (q) (uniono '() '(a) q))
+  '((a)))
+
+(test-check 'uniono-4
+  (run* (q) (uniono '(a) '(b) q))
+  '((a b)))
+
+(test-check 'uniono-5
+  (run* (q) (uniono '(a) '(b a) q))
+  '((b a)))
+
+(test-check 'uniono-6
+  (run* (q) (uniono '(a) '(b a) q))
+  '((b a)))
+
+(test-check 'uniono-7
+  (run* (q) (uniono '(a b) '(b a) q))
+  '((b a)))
+
+(test-check 'uniono-8
+  (run* (q) (uniono '(a b) '(b a c) q))
+  '((b a c)))
+
+(test-check 'uniono-9
+  (run* (q) (uniono '(a b d) '(b a c) q))
+  '((d b a c)))

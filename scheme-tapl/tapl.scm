@@ -20,7 +20,7 @@
 
 (library
   (tapl-ck)
-  (export T? T)
+  (export T? T uniono seto)
   (import (rnrs)
           (match)
           (cKanren ck)
@@ -63,7 +63,7 @@
 ;;; For example, see:
 ;;;
 ;;; http://cmpe.emu.edu.tr/bayram/courses/532/ForPresentation/p861-dovier.pdf
-
+  
   )
 
 (import (tapl-ck))
