@@ -6,6 +6,17 @@
   (:use [clojure.test])
   )
 
+(deftest test-T?
+  (is (= (T? :true) true))
+  (is (= (T? :false) true))
+  (is (= (T? :zero) true))
+  (is (= (T? [:succ [:succ [:pred :zero]]]) true))
+  (is (= (T? [:succ [:succ [:pred :false]]]) true))
+  (is (= (T? [:succ [:succ [:pred :foo]]]) false))
+  (is (= (T? [:if :false [:succ :zero] [:pred [:succ :zero]]]) true))
+  (is (= (T? [:if :false [:succ :foo] [:pred [:succ :zero]]]) false))
+  )
+
 (deftest test-T
   (is (= (run* [q] (T :true)) '(_.0)))
   (is (= (run* [q] (T :false)) '(_.0)))

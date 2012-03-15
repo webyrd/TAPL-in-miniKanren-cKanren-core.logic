@@ -2,6 +2,6 @@ Translation of Benjamin C. Pierce's excellent 'Types and Programming Languages' 
 
 This is an exercise to help me learn more about types, better understand the strengths and limitations of miniKanren, decide which constraints should be added to cKanren, and learn Clojure and core.logic
 
-Thanks to Dan Friedman for suggesting this exercise years ago.
+Thanks to Dan Friedman for suggesting this exercise years ago, and to David Nolen for help with core.logic, core.match, and general Clojuring.
 
 --Will
