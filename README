@@ -6,7 +6,7 @@ Thanks to Dan Friedman for suggesting this exercise years ago, and to David Nole
 
 Update -- 30 May 2013
 =====================
-Okay, I'm finally unstuck again, due to Nada Amin and Claire Alvis, who have implemented CLP(Set) in miniKanren and Racket's cKaren, respectively.  I'll probably be working in the Racket version for now, since I know Racket/Scheme better than I know Clojure, and since Claire has been adding other TAPL-related features to cKanren.
+Okay, I'm finally unstuck again, due to Nada Amin and Claire Alvis, who have implemented CLP(Set) in miniKanren and Racket's cKaren, respectively.
 
 Update -- 29 Sept 2012
 ======================
