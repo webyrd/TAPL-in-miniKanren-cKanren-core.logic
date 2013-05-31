@@ -7,7 +7,7 @@
 
 ; 3.2.3  Terms, concretely (p. 27)
 ; Defined using CLP(Set) and Peano numbers (z, (s z), (s (s z)), etc.)
-; Adapted from @nadamin's https://github.com/namin/clpset-miniKanren/blob/master/tapl.scm
+; Adapted from @namin's https://github.com/namin/clpset-miniKanren/blob/master/tapl.scm
 ;
 ; Alas, this code is slowwwwwww
 (define S
