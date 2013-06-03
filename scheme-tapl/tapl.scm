@@ -67,6 +67,7 @@
 
 
   (define MAXINT (expt 2 32))
+
   
   ; 3.3.2  Term size (p. 29)
   (define sizeo
@@ -74,24 +75,30 @@
       (fresh ()
         (infd s (range 0 MAXINT))
         (conde
-          [(conde
+          [(== 1 s)
+           (conde
              [(== 'true t)]
              [(== 'false t)]
-             [(== 0 t)])
-           (== 1 s)]
+             [(== 0 t)])]
           [(fresh (t1 s1)
              (conde
                [(== `(succ ,t1) t)]
                [(== `(pred ,t1) t)]
                [(== `(iszero ,t1) t)])
+             (infd s1 (range 0 MAXINT))
              (plusfd s1 1 s)
              (sizeo t1 s1))]
           [(fresh (t1 t2 t3 s1 s2 s3 s4 s5)
-             (infd s1 s2 s3 s4 s5 (range 0 MAXINT))
              (== `(if ,t1 ,t2 ,t3) t)
+             (infd s1 s2 s3 s4 s5 (range 0 MAXINT))
              (plusfd s1 s2 s4)
              (plusfd s4 s3 s5)
              (plusfd s5 1 s)
+;             (<fd s1 s)
+;             (<fd s2 s)
+;             (<fd s3 s)
+;             (<fd s4 s)
+;             (<fd s5 s)
              (sizeo t1 s1)
              (sizeo t2 s2)
              (sizeo t3 s3))]))))

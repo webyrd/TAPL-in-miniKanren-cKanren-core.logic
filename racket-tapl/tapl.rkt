@@ -2,8 +2,8 @@
 
 ;;; Dependencies:  Racket and cKanren (https://github.com/calvis/cKanren)
 (require cKanren/miniKanren)
-;(require cKanren/neq)
-;(require cKanren/absento)
+(require cKanren/neq)
+(require cKanren/absento)
 (require cKanren/sets)
 
 (provide (all-defined-out))
