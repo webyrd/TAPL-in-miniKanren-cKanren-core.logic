@@ -81,6 +81,34 @@
          (uniono o1 or out))))))
 
 
+
+; 3.3.1  Induction on Terms (p. 29)
+
+(define Constso
+  (lambda (t out)
+    (conde
+      [(== 'true t) (== (make-set '(true)) out)]
+      [(== 'false t) (== (make-set '(false)) out)]
+      [(== 0 t) (== (make-set '(0)) out)]
+      [(fresh (t1)
+         (== `(succ ,t1) t)
+         (Constso t1 out))]
+      [(fresh (t1)
+         (== `(pred ,t1) t)
+         (Constso t1 out))]
+      [(fresh (t1)
+         (== `(iszero ,t1) t)
+         (Constso t1 out))]
+      [(fresh (t1 t2 t3 res1 res2 res3 res4)
+         (== `(if ,t1 ,t2 ,t3) t)
+         (Constso t1 res1)
+         (Constso t2 res2)
+         (Constso t3 res3)
+         (uniono res1 res2 res4)
+         (uniono res4 res3 out))])))
+
+
+
 (module+ test
   (require cKanren/tester)
 
@@ -143,5 +171,33 @@
   ;;      (plus true false) (plus true true) (plus true zero)
   ;;      (plus zero false) (plus zero true) (plus zero zero)
   ;;      (succ false) (succ true) (succ zero) false true zero)))
+
+
+  (test "Constso-1"
+    (run 1 (q) (Constso 'true q))
+    (list (make-set '(true))))
+
+  (test "Constso-2"
+    (run 1 (q) (Constso 'false q))
+    (list (make-set '(false))))
+
+  (test "Constso-3"
+    (run 1 (q) (Constso 0 q))
+    (list (make-set '(0))))
+
+  (test "Constso-4"
+    (run 1 (q) (Constso `(pred true) q))
+    (list (make-set '(true))))
+
+  (test "Constso-5"
+;;; Hmmm. run 2 generates duplicate answers.    
+    (run 1 (q) (Constso `(if true (succ (pred (succ 0))) (succ (succ 0))) q))
+    (list (make-set '(0 true))))
+
+  (test "Constso-6"
+    (run 3 (q) (fresh (t c) (Constso t c) (== `(,t ,c) q)))
+    `((true ,(make-set '(true)))
+      (false ,(make-set '(false)))
+      (0 ,(make-set '(0)))))
   
 )
