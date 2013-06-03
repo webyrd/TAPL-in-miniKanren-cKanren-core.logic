@@ -1,5 +1,5 @@
 (load "cKanren/tester.scm")
-(load "tapl-ck.scm")
+(load "tapl.scm")
 
 ; 3.2.1  Terms, inductively  (p. 26)  
 (test-check 'T?-1
@@ -171,38 +171,151 @@
     (succ (if true zero true))
     (if true true (if true zero true))))
 
-(test-check 'uniono-1
-  (run* (q) (uniono '() '() q))
-  '(()))
+;; (test-check 'uniono-1
+;;   (run* (q) (uniono '() '() q))
+;;   '(()))
 
-(test-check 'uniono-2
-  (run* (q) (uniono '(a) '() q))
-  '((a)))
+;; (test-check 'uniono-2
+;;   (run* (q) (uniono '(a) '() q))
+;;   '((a)))
 
-(test-check 'uniono-3
-  (run* (q) (uniono '() '(a) q))
-  '((a)))
+;; (test-check 'uniono-3
+;;   (run* (q) (uniono '() '(a) q))
+;;   '((a)))
 
-(test-check 'uniono-4
-  (run* (q) (uniono '(a) '(b) q))
-  '((a b)))
+;; (test-check 'uniono-4
+;;   (run* (q) (uniono '(a) '(b) q))
+;;   '((a b)))
 
-(test-check 'uniono-5
-  (run* (q) (uniono '(a) '(b a) q))
-  '((b a)))
+;; (test-check 'uniono-5
+;;   (run* (q) (uniono '(a) '(b a) q))
+;;   '((b a)))
 
-(test-check 'uniono-6
-  (run* (q) (uniono '(a) '(b a) q))
-  '((b a)))
+;; (test-check 'uniono-6
+;;   (run* (q) (uniono '(a) '(b a) q))
+;;   '((b a)))
 
-(test-check 'uniono-7
-  (run* (q) (uniono '(a b) '(b a) q))
-  '((b a)))
+;; (test-check 'uniono-7
+;;   (run* (q) (uniono '(a b) '(b a) q))
+;;   '((b a)))
 
-(test-check 'uniono-8
-  (run* (q) (uniono '(a b) '(b a c) q))
-  '((b a c)))
+;; (test-check 'uniono-8
+;;   (run* (q) (uniono '(a b) '(b a c) q))
+;;   '((b a c)))
 
-(test-check 'uniono-9
-  (run* (q) (uniono '(a b d) '(b a c) q))
-  '((d b a c)))
+;; (test-check 'uniono-9
+;;   (run* (q) (uniono '(a b d) '(b a c) q))
+;;   '((d b a c)))
+
+; 3.3.2  Term size  (p. 29)
+(test-check 'size-1
+  (run* (q) (sizeo 'true q))
+  '(1))
+
+(test-check 'size-2
+  (run* (q) (sizeo 'false q))
+  '(1))
+
+(test-check 'size-3
+  (run* (q) (sizeo 0 q))
+  '(1))
+
+(test-check 'size-4
+  (run* (q) (sizeo '(pred 0) q))
+  '(2))
+
+(test-check 'size-5
+  (run* (q) (sizeo '(succ (pred 0)) q))
+  '(3))
+
+(test-check 'size-6
+  (run* (q) (sizeo '(if true 0 false) q))
+  '(4))
+
+(test-check 'size-7
+  (run* (q) (sizeo '(if true (succ (pred 0)) (succ 0)) q))
+  '(7))
+
+(test-check 'size-8
+  (run 50 (q) (fresh (t s) (sizeo t s) (== `(,t ,s) q)))
+  '((true 1)
+    (false 1)
+    (0 1)
+    ((succ true) 2)
+    ((succ false) 2)
+    ((succ 0) 2)
+    ((pred true) 2)
+    ((iszero true) 2)
+    ((if true true true) 4)
+    ((pred false) 2)
+    ((if true true false) 4)
+    ((iszero false) 2)
+    ((if true true 0) 4)
+    ((pred 0) 2)
+    ((iszero 0) 2)
+    ((if true false true) 4)
+    ((if true false false) 4)
+    ((if true false 0) 4)
+    ((succ (succ true)) 3)
+    ((if true 0 true) 4)
+    ((if true true (succ true)) 5)
+    ((succ (succ false)) 3)
+    ((if true 0 false) 4)
+    ((if true true (succ false)) 5)
+    ((succ (succ 0)) 3)
+    ((succ (pred true)) 3)
+    ((if true 0 0) 4)
+    ((if true true (succ 0)) 5)
+    ((succ (iszero true)) 3)
+    ((if true true (pred true)) 5)    
+    ((succ (if true true true)) 5)
+    ((pred (succ true)) 3)
+    ((iszero (succ true)) 3)
+    ((if true true (iszero true)) 5)
+    ((succ (pred false)) 3)
+    ((if true true (if true true true)) 7)
+    ((succ (if true true false)) 5)
+    ((succ (iszero false)) 3)
+    ((if true false (succ true)) 5)
+    ((if false true true) 4)
+    ((if true true (pred false)) 5)
+    ((if true true (if true true false)) 7)
+    ((succ (if true true 0)) 5)
+    ((pred (succ false)) 3)
+    ((iszero (succ false)) 3)
+    ((if true true (iszero false)) 5)
+    ((succ (pred 0)) 3)
+    ((if true true (if true true 0)) 7)
+    ((succ (iszero 0)) 3)
+    ((if true false (succ false)) 5)))
+
+(test-check 'size-8
+;;; alas, run 28 diverges  
+  (run 27 (q) (sizeo q 3))
+  '((succ (succ true))
+    (succ (succ false))
+    (succ (succ 0))
+    (succ (pred true))
+    (succ (iszero true))
+    (pred (succ true))
+    (iszero (succ true))
+    (succ (pred false))
+    (succ (iszero false))
+    (pred (succ false))
+    (iszero (succ false))
+    (succ (pred 0))
+    (succ (iszero 0))
+    (pred (succ 0))
+    (iszero (succ 0))
+    (pred (pred true))
+    (iszero (pred true))
+    (pred (iszero true))
+    (iszero (iszero true))
+    (pred (pred false))
+    (iszero (pred false))
+    (pred (iszero false))
+    (iszero (iszero false))
+    (pred (pred 0))
+    (iszero (pred 0))
+    (pred (iszero 0))
+    (iszero (iszero 0))))

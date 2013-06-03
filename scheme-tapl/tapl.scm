@@ -19,11 +19,12 @@
 ;; THE SOFTWARE.
 
 (library
-  (tapl-ck)
-  (export T? T uniono seto)
+  (tapl)
+  (export T? T sizeo)
   (import (rnrs)
           (match)
           (cKanren ck)
+          (cKanren fd)
           (cKanren tree-unify)
           (cKanren neq))
 
@@ -58,13 +59,43 @@
            (T t2)
            (T t3))])))
 
-  ; 3.2.3  Terms, concretely (p. 27)
+  ; 3.2.3  Terms, concretely  (p. 27)
 ;;; To do this properly will require adding set constraints to cKanren (CLP(Set)).
 ;;; For example, see:
 ;;;
 ;;; http://cmpe.emu.edu.tr/bayram/courses/532/ForPresentation/p861-dovier.pdf
+
+
+  (define MAXINT (expt 2 32))
   
+  ; 3.3.2  Term size (p. 29)
+  (define sizeo
+    (lambda (t s)
+      (fresh ()
+        (infd s (range 0 MAXINT))
+        (conde
+          [(conde
+             [(== 'true t)]
+             [(== 'false t)]
+             [(== 0 t)])
+           (== 1 s)]
+          [(fresh (t1 s1)
+             (conde
+               [(== `(succ ,t1) t)]
+               [(== `(pred ,t1) t)]
+               [(== `(iszero ,t1) t)])
+             (plusfd s1 1 s)
+             (sizeo t1 s1))]
+          [(fresh (t1 t2 t3 s1 s2 s3 s4 s5)
+             (infd s1 s2 s3 s4 s5 (range 0 MAXINT))
+             (== `(if ,t1 ,t2 ,t3) t)
+             (plusfd s1 s2 s4)
+             (plusfd s4 s3 s5)
+             (plusfd s5 1 s)
+             (sizeo t1 s1)
+             (sizeo t2 s2)
+             (sizeo t3 s3))]))))
   )
 
-(import (tapl-ck))
 
+(import (tapl))
