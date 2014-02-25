@@ -171,41 +171,110 @@
     (succ (if true zero true))
     (if true true (if true zero true))))
 
-;; (test-check 'uniono-1
-;;   (run* (q) (uniono '() '() q))
-;;   '(()))
+; 3.2.3  Terms, concretely  (p. 27)
 
-;; (test-check 'uniono-2
-;;   (run* (q) (uniono '(a) '() q))
-;;   '((a)))
+(test-check 'Sio-zero
+  (run* (q) (Sio 'z q))
+  '())
 
-;; (test-check 'uniono-3
-;;   (run* (q) (uniono '() '(a) q))
-;;   '((a)))
+(test-check 'Sio-one
+  (run* (q) (Sio '(s z) q))
+  '(true false 0))
 
-;; (test-check 'uniono-4
-;;   (run* (q) (uniono '(a) '(b) q))
-;;   '((a b)))
+(test-check 'Sio-two
+  (run* (q) (Sio '(s (s z)) q))
+  '((succ true)
+    (succ false)
+    (succ 0)
+    (pred true)
+    (pred false)
+    (pred 0)
+    (iszero true)
+    (iszero false)
+    (iszero 0)
+    (if true true true)
+    (if false true true)
+    (if 0 true true)
+    (if true true false)
+    (if false true false)
+    (if 0 true false)
+    (if true true 0)
+    (if false true 0)
+    (if 0 true 0)
+    (if true false true)
+    (if false false true)
+    (if 0 false true)
+    (if true 0 true)
+    (if false 0 true)
+    (if 0 0 true)
+    (if true false false)
+    (if false false false)
+    (if 0 false false)
+    (if true 0 false)
+    (if false 0 false)
+    (if 0 0 false)
+    (if true false 0)
+    (if true 0 0)
+    (if false false 0)
+    (if false 0 0)
+    (if 0 false 0)
+    (if 0 0 0)))
 
-;; (test-check 'uniono-5
-;;   (run* (q) (uniono '(a) '(b a) q))
-;;   '((b a)))
+(test-check 'Sio-three
+  (run 20 (q) (Sio '(s (s (s z))) q))
+  '((succ (succ true))
+    (succ (succ false))
+    (succ (succ 0))
+    (succ (pred true))
+    (succ (pred false))
+    (succ (pred 0))
+    (pred (succ true))
+    (succ (iszero true))
+    (succ (iszero false))
+    (pred (succ false))
+    (succ (iszero 0))
+    (pred (succ 0))
+    (pred (pred true))
+    (pred (pred false))
+    (succ (if true true true))
+    (pred (pred 0))
+    (succ (if false true true))
+    (iszero (succ true))
+    (succ (if 0 true true))
+    (pred (iszero true))))
 
-;; (test-check 'uniono-6
-;;   (run* (q) (uniono '(a) '(b a) q))
-;;   '((b a)))
+(test-check 'Sio-4
+  (length (run* (q) (Sio '(s (s z)) q)))
+  36)
 
-;; (test-check 'uniono-7
-;;   (run* (q) (uniono '(a b) '(b a) q))
-;;   '((b a)))
+(test-check 'Sio-5
+  (length (run* (q) (Sio '(s (s (s z))) q)))
+  46764)
 
-;; (test-check 'uniono-8
-;;   (run* (q) (uniono '(a b) '(b a c) q))
-;;   '((b a c)))
+(test-check 'Sio-6
+  (run 20 (q) (fresh (n t) (Sio n t) (== `(,n ,t) q)))
+  '(((s z) true)
+    ((s z) false)
+    ((s z) 0)
+    ((s (s z)) (succ true))
+    ((s (s z)) (succ false))
+    ((s (s z)) (succ 0))
+    ((s (s z)) (pred true))
+    ((s (s z)) (pred false))
+    ((s (s (s z))) (succ (succ true)))
+    ((s (s z)) (pred 0))
+    ((s (s z)) (iszero true))
+    ((s (s (s z))) (succ (succ false)))
+    ((s (s (s z))) (succ (succ 0)))
+    ((s (s (s z))) (succ (pred true)))
+    ((s (s z)) (iszero false))
+    ((s (s (s z))) (pred (succ true)))
+    ((s (s (s z))) (succ (pred false)))
+    ((s (s z)) (iszero 0))
+    ((s (s (s (s z)))) (succ (succ (succ true))))
+    ((s (s (s z))) (pred (succ false)))))
 
-;; (test-check 'uniono-9
-;;   (run* (q) (uniono '(a b d) '(b a c) q))
-;;   '((d b a c)))
+
 
 ; 3.3.2  Term size  (p. 29)
 (test-check 'size-1

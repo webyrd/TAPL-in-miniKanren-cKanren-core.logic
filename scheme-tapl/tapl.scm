@@ -20,7 +20,7 @@
 
 (library
   (tapl)
-  (export T? T sizeo)
+  (export T? T Sio sizeo)
   (import (rnrs)
           (match)
           (cKanren ck)
@@ -60,11 +60,48 @@
            (T t3))])))
 
   ; 3.2.3  Terms, concretely  (p. 27)
-;;; To do this properly will require adding set constraints to cKanren (CLP(Set)).
-;;; For example, see:
-;;;
-;;; http://cmpe.emu.edu.tr/bayram/courses/532/ForPresentation/p861-dovier.pdf
+  ;
+  ; This definition arguably isn't in the spirit of the book, since
+  ; the value returned is a single element of the set at the level.
+  ; A run* will return all terms at that level (S1, S2, etc).
+  ;
+  ; An arguably more accurate solution to this problem would use the
+  ; equivalent of Prolog's setof predicate to generate a list of
+  ; values within the miniKanren program, rather than relying on the
+  ; output of a run* to see all elements of the set at each level.
+  ;
+  ; Here I'm representing numbers as Peano numerals:
+  ; z, (s z), (s (s z)), etc.
+  ;
+  ; The number of terms at each level grows *very* quickly.  Beware
+  ; using run* with levels above S2 (a.k.a, (s (s z))).
+  (define S1o
+    (lambda (n t)
+      (fresh ()
+        (== '(s z) n)
+        (conde
+          [(== 'true t)]
+          [(== 'false t)]
+          [(== 0 t)]))))
 
+  (define Sio
+    (lambda (n t)
+      (conde
+        [(S1o n t)]
+        [(fresh (n-2 t1)
+           (== `(s (s ,n-2)) n)
+           (conde
+             [(== `(succ ,t1) t)]
+             [(== `(pred ,t1) t)]
+             [(== `(iszero ,t1) t)]
+             [(fresh (t2 t3)
+                (== `(if ,t1 ,t2 ,t3) t)
+                (Sio `(s ,n-2) t2)
+                (Sio `(s ,n-2) t3))])
+           (Sio `(s ,n-2) t1))])))
+
+
+ 
 
   (define MAXINT (expt 2 32))
 
